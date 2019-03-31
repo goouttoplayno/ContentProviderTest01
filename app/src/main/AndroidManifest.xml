@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:authorities=".PersonContentProvider"
+            android:authorities="com.example.contentprovidertest01.PersonContentProvider"
             android:name="com.example.contentprovidertest01.PersonContentProvider"/>
     </application>
 

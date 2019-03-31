@@ -3,9 +3,11 @@ package com.example.contentprovidertest01;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,7 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     private Context context = InstrumentationRegistry.getTargetContext();
+
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -27,8 +30,9 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.example.contentprovidertest01", appContext.getPackageName());
     }
+
     @Test
-    public void calltest(){
+    public void calltest() {
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues values = new ContentValues();
         values.put("name", "生命一号");
@@ -38,13 +42,24 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void delete(){
+    public void insert(){
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put("name", "生命一号");
+        values.put("address", "湖北");
+        Uri uri = Uri.parse("content://com.example.contentprovidertest01.PersonContentProvider/person");
+        contentResolver.insert(uri, values);
+    }
+
+    @Test
+    public void delete() {
         ContentResolver contentResolver = context.getContentResolver();
         Uri uri = Uri.parse("content://com.example.contentprovidertest01.PersonContentProvider/person/2");
         contentResolver.delete(uri, null, null);
     }
+
     @Test
-    public void update(){
+    public void update() {
         ContentResolver contentResolver = context.getContentResolver();
         Uri uri = Uri.parse("content://com.example.contentprovidertest01.PersonContentProvider/person/2");
         ContentValues values = new ContentValues();
@@ -52,8 +67,9 @@ public class ExampleInstrumentedTest {
         values.put("address", "上海");
         contentResolver.update(uri, values, null, null);
     }
+
     @Test
-    public void updates(){
+    public void updates() {
         ContentResolver contentResolver = context.getContentResolver();
         Uri uri = Uri.parse("content://com.example.contentprovidertest01.PersonContentProvider/person/student");
         ContentValues values = new ContentValues();
@@ -62,5 +78,29 @@ public class ExampleInstrumentedTest {
         String where = "address = ?";
         String[] where_args = {"beijing"};
         contentResolver.update(uri, values, where, where_args);
+    }
+
+    @Test
+    public void query() {
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.example.contentprovidertest01.PersonContentProvider/person");
+        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+        while (cursor.moveToNext()) {
+            Log.i("ExampleInstrumentedTest", "--->>" + cursor.getString(cursor.getColumnIndex("name")));
+        }
+        cursor.close();
+    }
+
+    @Test
+    public void querys() {
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.example.contentprovidertest01.PersonContentProvider/person");
+        String where = "address = ?";
+        String[] where_args = {"湖北"};
+        Cursor cursor = contentResolver.query(uri, null, where, where_args, null);
+        while (cursor.moveToNext()){
+            Log.i("ExampleInstrumentedTest", "--->>" + cursor.getString(cursor.getColumnIndex("name")));
+        }
+        cursor.close();
     }
 }

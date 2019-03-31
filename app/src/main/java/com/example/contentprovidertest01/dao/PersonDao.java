@@ -68,16 +68,16 @@ public class PersonDao {
     //
     public Cursor queryPersons(String selection, String[] selectionArgs) {
         SQLiteDatabase database = null;
+//        SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
         Cursor cursor = null;
         try {
             database = dbHelper.getReadableDatabase();
-            cursor = database.query(true, "person", null, selection, selectionArgs, null, null, null, null);
+            cursor = database.query(false, "person", null, selection, selectionArgs, null, null, null, null);
+//            sqLiteQueryBuilder.setTables("person");
+//            cursor = sqLiteQueryBuilder.query(database, null, selection, selectionArgs,null,null,null);
+
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (database != null) {
-                database.close();
-            }
         }
         return cursor;
     }

@@ -85,13 +85,14 @@ public class PersonContentProvider extends ContentProvider {
         //解析uri，返回code
         int flag = URI_MATCHER.match(uri);
         switch (flag) {
-            case PERSON:
+            case PERSONS:
                 long id = personDao.insertPerson(values);
                 resultUri = ContentUris.withAppendedId(uri, id);
                 Log.i(TAG, "插入成功， id = " + id);
                 Log.i(TAG, "resultUri = " + resultUri.toString());
                 System.out.println("insert success");
                 break;
+
         }
         return resultUri;
     }
